@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DomainModelDesigner.Generator.Domain.Shared\DomainModelDesigner.Generator.Domain.Shared.csproj" />
+    <PackageReference Include="Volo.Abp.Ddd.Domain" Version="0.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="DomainModelDesigner\Generator\Localization\Domain\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="DomainModelDesigner\Generator\Localization\Domain\*.json" />
+  </ItemGroup>
+
+</Project>
