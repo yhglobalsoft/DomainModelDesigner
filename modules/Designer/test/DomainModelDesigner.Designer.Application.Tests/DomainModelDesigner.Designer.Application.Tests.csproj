@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DomainModelDesigner.Designer.Application\DomainModelDesigner.Designer.Application.csproj" />
+    <ProjectReference Include="..\DomainModelDesigner.Designer.Domain.Tests\DomainModelDesigner.Designer.Domain.Tests.csproj" />
+  </ItemGroup>
+
+</Project>
