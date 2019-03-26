@@ -5,6 +5,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace DomainModelDesigner.Designer.Dtos
 {
+    [Serializable]
     public class SearchAppInputDto : PagedAndSortedResultRequestDto
     {
         public string Filter { get; set; }

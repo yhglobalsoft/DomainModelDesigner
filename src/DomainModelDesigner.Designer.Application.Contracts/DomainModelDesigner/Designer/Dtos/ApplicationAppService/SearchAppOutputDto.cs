@@ -5,6 +5,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace DomainModelDesigner.Designer.Dtos
 {
+    [Serializable]
     public class SearchAppOutputDto : FullAuditedEntityDto<Guid>
     {
         public string AppName { get; set; }
@@ -12,7 +13,7 @@ namespace DomainModelDesigner.Designer.Dtos
         public List<SearchAppOutputDtoDetail> Domains { get; set; }
     }
 
-
+    [Serializable]
     public class SearchAppOutputDtoDetail
     {
         public string DomainName { get; private set; }

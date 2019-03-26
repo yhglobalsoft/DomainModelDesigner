@@ -11,7 +11,7 @@ namespace DomainModelDesigner.Designer.AppServices
     public interface IApplicationAppService:
         IAsyncCrudAppService<SearchAppOutputDto,Guid,SearchAppInputDto,CreateAppInputDto>
     {
-        Task UpdateDomainAsync(UpdateDomainInputDto dto, CancellationToken cancellationToken = default(CancellationToken));
+        Task UpdateDomainAsync(Guid appId, UpdateDomainInputDto dto, CancellationToken cancellationToken = default(CancellationToken));
 
         //Task<Guid> CreateAsync(CreateAppInputDto dto, CancellationToken cancellationToken=default(CancellationToken));
 

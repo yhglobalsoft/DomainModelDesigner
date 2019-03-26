@@ -81,9 +81,9 @@ namespace DomainModelDesigner.Designer.Controllers
 
         [HttpPost]
         [Route("updateDomain")]
-        public async Task UpdateDomainAsync(UpdateDomainInputDto dto, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task UpdateDomainAsync(Guid id,UpdateDomainInputDto dto, CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _service.UpdateDomainAsync(dto);
+            await _service.UpdateDomainAsync(id,dto);
         }
     }
 }

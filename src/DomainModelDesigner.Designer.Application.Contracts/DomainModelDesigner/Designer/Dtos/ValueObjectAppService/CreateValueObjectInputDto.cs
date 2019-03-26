@@ -4,6 +4,7 @@ using System.Text;
 
 namespace DomainModelDesigner.Designer.Dtos
 {
+    [Serializable]
     public class CreateValueObjectInputDto
     {
         /// <summary>
@@ -21,6 +22,7 @@ namespace DomainModelDesigner.Designer.Dtos
         public CreateValueObjectInputDtoDetail Fields { get; set; }
     }
 
+    [Serializable]
     public class CreateValueObjectInputDtoDetail
     {
         public string FieldName { get; set; }

@@ -19,18 +19,15 @@ namespace DomainModelDesigner.Designer.AppServices
     {
         private readonly IReadOnlyValueObjectRepository _repository;
         private readonly IValueObjectManager _manager;
-        private readonly IStringLocalizer<DesignerResource> _localizer;
-        public ValueObjectAppService(IReadOnlyValueObjectRepository repository, IValueObjectManager manager,
-            IStringLocalizer<DesignerResource> localizer)
+        public ValueObjectAppService(IReadOnlyValueObjectRepository repository, IValueObjectManager manager)
         {
             _repository = repository;
             _manager = manager;
-            _localizer = localizer;
         }
 
         public async Task<ValueObjectEntityDto> CreateAsync(CreateValueObjectInputDto input)
         {
-            new CreateValueObjectInputDtoValidator(_localizer).ValidateAndThrow(input);
+            new CreateValueObjectInputDtoValidator(L).ValidateAndThrow(input);
 
             var obj = ObjectMapper.Map<CreateValueObjectInputDto, ValueObjectAggRoot>(input);
 
@@ -69,12 +66,14 @@ namespace DomainModelDesigner.Designer.AppServices
         {
             var obj = await _repository.GetAsync(id);
             if (obj == null)
-                throw new Exception(_localizer["App:003"]);
+                throw new Exception(L["App:003"]);
 
             obj.SetDescriptions(input.Desc);
-            obj.SetFieldDescription(input.fi);
+            //obj.SetFieldDescription(input);
 
             await _manager.UpdateAsync(obj);
+
+            return null;
         }
     }
 }

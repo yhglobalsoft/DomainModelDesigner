@@ -9,7 +9,7 @@ namespace DomainModelDesigner.Designer.Dtos.ValueObjectAppService.Validators
 {
     public class CreateValueObjectInputDtoValidator: AbstractValidator<CreateValueObjectInputDto>
     {
-        public CreateValueObjectInputDtoValidator(IStringLocalizer<DesignerResource> localizer)
+        public CreateValueObjectInputDtoValidator(IStringLocalizer localizer)
         {
 
         }

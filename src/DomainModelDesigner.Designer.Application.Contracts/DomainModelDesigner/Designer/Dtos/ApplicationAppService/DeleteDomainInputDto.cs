@@ -4,6 +4,7 @@ using System.Text;
 
 namespace DomainModelDesigner.Designer.Dtos
 {
+    [Serializable]
     public class DeleteDomainInputDto
     {
         public Guid AppId { get; set; }

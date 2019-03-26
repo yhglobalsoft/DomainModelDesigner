@@ -16,25 +16,23 @@ using FluentValidation;
 using System.Linq;
 using Volo.Abp.Application.Dtos;
 
-namespace DomainModelDesigner.Designer.AppServices
+namespace DomainModelDesigner.Designer.AppServices 
 {
     public class ApplicationAppService :ApplicationService, IApplicationAppService
     {
         private readonly IAppManager _appManager;
         private readonly IReadOnlyAppAggRootRepository _appRepository;
-        private readonly IStringLocalizer<DesignerResource> _localizer;
+        //private readonly IStringLocalizer<DesignerResource> _localizer;
 
-        public ApplicationAppService(IAppManager appManager, IReadOnlyAppAggRootRepository appAggRootRepository,
-            IStringLocalizer<DesignerResource> localizer)
+        public ApplicationAppService(IAppManager appManager, IReadOnlyAppAggRootRepository appAggRootRepository)
         {
             _appManager = appManager;
-            _localizer = localizer;
             _appRepository = appAggRootRepository;
         }
 
         public async Task<SearchAppOutputDto> CreateAsync(CreateAppInputDto input)
         {
-            new CreateAppInputDtoValidator(_localizer).ValidateAndThrow(input);
+            new CreateAppInputDtoValidator(L).ValidateAndThrow(input);
 
             var obj = ObjectMapper.Map<CreateAppInputDto, AppAggRoot>(input);
 
@@ -81,15 +79,15 @@ namespace DomainModelDesigner.Designer.AppServices
             return ObjectMapper.Map<AppAggRoot, SearchAppOutputDto>(result);
         }
 
-        public async Task UpdateDomainAsync(UpdateDomainInputDto dto, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task UpdateDomainAsync(Guid apId,UpdateDomainInputDto dto, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var obj =await _appRepository.GetAsync(dto.AppId);
+            var obj =await _appRepository.GetAsync(apId);
             if (obj == null)
-                throw new Exception(_localizer["App:003"]);
+                throw new Exception(L["App:003"]);
 
             var domain = obj.DomainEntities.SingleOrDefault(p=>p.Id.Equals(dto.Domain.Id));
             if(domain==null)
-                throw new Exception(_localizer["App:003"]);
+                throw new Exception(L["App:003"]);
 
             domain.SetDomainName(dto.Domain.DomainName);
             domain.SetRemark(dto.Domain.Remark);

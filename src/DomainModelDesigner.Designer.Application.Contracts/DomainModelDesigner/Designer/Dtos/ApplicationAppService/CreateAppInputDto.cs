@@ -6,6 +6,7 @@ using Volo.Abp.Application.Dtos;
 using FluentValidation;
 //using FluentValidation.Attributes;
 using DomainModelDesigner.Designer.Localization;
+using Volo.Abp.ExceptionHandling;
 
 namespace DomainModelDesigner.Designer.Dtos
 {
@@ -20,6 +21,7 @@ namespace DomainModelDesigner.Designer.Dtos
 
     }
 
+    [Serializable]
     public class CreateAppInputDtoDetail
     {
         public string DomainName { get; set; }
