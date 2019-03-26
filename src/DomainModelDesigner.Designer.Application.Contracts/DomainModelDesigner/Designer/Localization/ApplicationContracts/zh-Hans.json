@@ -1,0 +1,9 @@
+{
+    "culture": "zh-Hans",
+  "texts": {
+    "Permission:Designer": "Designer",
+    "App:001": "参数{0}不能为空",
+    "App:002": "参数{0}长度不能超过{1}",
+    "App:003": "数据不存在或已被删除"
+  }
+  }

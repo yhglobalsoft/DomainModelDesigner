@@ -1,0 +1,9 @@
+{
+  "culture": "en",
+  "texts": {
+    "DE:001": "parameter {paramName} can not be null or empty",
+    "DE:002": "数据{paramValue}已存在，不能重复",
+    "DE:003": "数据不存在或已被删除",
+    "DE:004": "数据已被使用，不能删除"
+  }
+}
