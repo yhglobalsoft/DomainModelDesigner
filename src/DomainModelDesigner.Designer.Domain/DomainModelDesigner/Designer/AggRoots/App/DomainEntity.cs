@@ -27,7 +27,7 @@ namespace DomainModelDesigner.Designer.Entities
         public virtual void SetDomainName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new BusinessException(DesignerDomainErrorCodes.NullOrEmptyCheck)
+                throw new DomainException(DesignerDomainErrorCodes.NullOrEmptyCheck)
                     .WithData("paramName", nameof(name));
 
             DomainName = name;

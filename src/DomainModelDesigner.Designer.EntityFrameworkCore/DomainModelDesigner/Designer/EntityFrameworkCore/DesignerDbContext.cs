@@ -1,5 +1,6 @@
 ﻿using DomainModelDesigner.Designer.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -8,6 +9,7 @@ namespace DomainModelDesigner.Designer.EntityFrameworkCore
     [ConnectionStringName("Designer")]
     public class DesignerDbContext : AbpDbContext<DesignerDbContext>, IDesignerDbContext
     {
+        private readonly IServiceProvider _serviceProvider;
         public static string TablePrefix { get; set; } = DesignerConsts.DefaultDbTablePrefix;
 
         public static string Schema { get; set; } = DesignerConsts.DefaultDbSchema;
@@ -18,12 +20,12 @@ namespace DomainModelDesigner.Designer.EntityFrameworkCore
         public DbSet<EntityObjectAggRoot> EntityObjectAggRoots { get; set; }
 
         public DbSet<AggRootObjectAggRoot> AggRootObjectAggRoots { get; set; }
-        public DbSet<IndexDesc> IndexDescs { get; set; }
+        public DbSet<IndexEntity> IndexDescs { get; set; }
 
         public DesignerDbContext(DbContextOptions<DesignerDbContext> options) 
             : base(options)
         {
-
+            //_serviceProvider = serviceProvider;
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

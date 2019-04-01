@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 using Volo.Abp.Localization;
-using DomainModelDesigner.Designer.Localization;
+//using DomainModelDesigner.Designer.Localization;
 
 namespace DomainModelDesigner.Designer
 {
@@ -12,10 +12,10 @@ namespace DomainModelDesigner.Designer
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources.Add<DesignerResource>("en");
-            });
+            //Configure<AbpLocalizationOptions>(options =>
+            //{
+            //    options.Resources.Add<DefaultResource>("en");
+            //});
         }
     }
 }

@@ -36,6 +36,16 @@ namespace DomainModelDesigner.Designer
 
             public const int Index_Len = 30;
         }
-        
+
+        public class FieldConsts
+        {
+            public const int FieldTypeMaxLen = 36;
+
+            public const int NameMaxLen = 20;
+
+            public const int FieldLenMaxLen = 10;
+
+            public const int FieldDescMaxLen = 255;
+        }
     }
 }

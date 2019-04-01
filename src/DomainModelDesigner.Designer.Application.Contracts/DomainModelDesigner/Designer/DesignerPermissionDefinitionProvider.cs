@@ -1,4 +1,4 @@
-﻿using DomainModelDesigner.Designer.Localization;
+﻿
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 
@@ -13,7 +13,7 @@ namespace DomainModelDesigner.Designer
 
         private static LocalizableString L(string name)
         {
-            return LocalizableString.Create<DesignerResource>(name);
+            return LocalizableString.Create<DefaultResource>(name);
         }
     }
 }

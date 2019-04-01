@@ -3,32 +3,34 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace DomainModelDesigner.Designer.EntityFrameworkCore.ModelConfigs
 {
     public class ValueObjectAggRootConfig
     {
-        public static void Config(ModelBuilder builder, string tablePrefix, string schema)
+        public static void Config(ModelBuilder builder, DesignerModelBuilderConfigurationOptions options)
         {
-            builder.Entity<ValueObjectAggRoot>(b => {
+            builder.Entity<ValueObjectAggRoot>(b =>
+            {
 
-                b.ToTable(tablePrefix + "ValueObjects", schema).HasKey(p => p.Id);
+                b.ToTable(options.TablePrefix + "ValueObjects", options.Schema).HasKey(p => p.Id);
                 b.Property(p => p.Id).ValueGeneratedOnAdd(); //id 自动生成
 
+                b.Property(p => p.DomainId).IsRequired();
                 b.Property(p => p.Name).HasMaxLength(DomainFieldLengthConsts.ValueObjectConsts.ValueObjectNameLen).IsRequired();
                 b.Property(p => p.Descriptions).HasMaxLength(DomainFieldLengthConsts.ValueObjectConsts.ValueObjectDescriptionLen);
-                b.Property(p => p.FieldName).HasMaxLength(DomainFieldLengthConsts.ValueObjectConsts.ValueObjectFieldNameLen).IsRequired();
-                b.Property(p => p.FieldTypeId).HasMaxLength(DomainFieldLengthConsts.ValueObjectConsts.ValueObjectFieldTypeIdLen).IsRequired();
-                b.Property(p => p.IsSimpleField).IsRequired();
-                b.Property(p => p.IsConstructorParameter).IsRequired();
-                b.Property(p => p.IsMultiple).IsRequired();
-                b.Property(p => p.FieldLen).HasMaxLength(DomainFieldLengthConsts.ValueObjectConsts.ValueObjectFieldLenLen).IsRequired();
-                b.Property(p => p.FieldDescription).HasMaxLength(DomainFieldLengthConsts.ValueObjectConsts.ValueObjectFieldDescriptionLen).IsRequired();
+
+                ////指定外键
+                //b.HasMany(p => p.Fields).WithOne().HasForeignKey(p=>p.FieldSourceId);
 
                 b.ConfigureExtraProperties();
 
                 b.HasIndex(p => p.Name).HasName("idx_Name");
+
+                ////设置从表级联删除
+                b.HasMany(p => p.Fields).WithOne().OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

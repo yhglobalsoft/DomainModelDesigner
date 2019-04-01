@@ -4,6 +4,7 @@ using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using System;
 
 namespace DomainModelDesigner.Designer.Host
 {
@@ -12,7 +13,6 @@ namespace DomainModelDesigner.Designer.Host
         public DemoAppDbContext(DbContextOptions<DemoAppDbContext> options)
             : base(options)
         {
-        
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

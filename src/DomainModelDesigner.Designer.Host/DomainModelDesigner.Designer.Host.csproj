@@ -33,6 +33,7 @@
     <ProjectReference Include="..\DomainModelDesigner.Designer.Application\DomainModelDesigner.Designer.Application.csproj" />
     <ProjectReference Include="..\DomainModelDesigner.Designer.EntityFrameworkCore\DomainModelDesigner.Designer.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\DomainModelDesigner.Designer.HttpApi\DomainModelDesigner.Designer.HttpApi.csproj" />
+    <ProjectReference Include="..\DomainModelDesigner.Designer.Inf\DomainModelDesigner.Designer.Inf.csproj" />
   </ItemGroup>
 
 </Project>

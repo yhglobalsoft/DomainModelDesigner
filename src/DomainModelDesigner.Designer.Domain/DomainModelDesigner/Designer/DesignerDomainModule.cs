@@ -1,4 +1,4 @@
-﻿using DomainModelDesigner.Designer.Localization;
+﻿
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Domain;
 using Volo.Abp.Localization;
@@ -23,12 +23,12 @@ namespace DomainModelDesigner.Designer
 
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources.Get<DesignerResource>().AddVirtualJson("/DomainModelDesigner/Designer/Localization/Domain");
+                options.Resources.Get<DefaultResource>().AddVirtualJson("/DomainModelDesigner/Designer/Localization/Domain");
             });
 
             Configure<ExceptionLocalizationOptions>(options =>
             {
-                options.MapCodeNamespace("Designer", typeof(DesignerResource));
+                options.MapCodeNamespace("DE", typeof(DefaultResource));
             });
         }
     }

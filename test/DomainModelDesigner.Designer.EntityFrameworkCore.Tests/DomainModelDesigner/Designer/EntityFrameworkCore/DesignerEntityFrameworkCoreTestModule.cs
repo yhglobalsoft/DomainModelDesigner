@@ -3,8 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.AspNetCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DomainModelDesigner.Designer.EntityFrameworkCore
 {
@@ -16,27 +19,50 @@ namespace DomainModelDesigner.Designer.EntityFrameworkCore
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var sqliteConnection = CreateDatabaseAndGetConnection();
+            Configure<DbConnectionOptions>(options =>
+            {
+                var sqlConn = "server=localhost;database=DMD_Designer;uid=root;pwd=123456.com;";
+                options.ConnectionStrings.Default = sqlConn;
+            });
 
             Configure<AbpDbContextOptions>(options =>
             {
-                options.Configure(abpDbContextConfigurationContext =>
+                options.Configure(cxt =>
                 {
-                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                    if (cxt.ExistingConnection != null)
+                    {
+                        cxt.DbContextOptions.UseMySql(cxt.ExistingConnection);
+                    }
+                    else
+                    {
+                        cxt.DbContextOptions.UseMySql(cxt.ConnectionString);
+                    }
                 });
             });
         }
-        
-        private static SqliteConnection CreateDatabaseAndGetConnection()
-        {
-            var connection = new SqliteConnection("Data Source=:memory:");
-            connection.Open();
+        //public override void ConfigureServices(ServiceConfigurationContext context)
+        //{
+        //    var sqliteConnection = CreateDatabaseAndGetConnection();
 
-            new DesignerDbContext(
-                new DbContextOptionsBuilder<DesignerDbContext>().UseSqlite(connection).Options
-            ).GetService<IRelationalDatabaseCreator>().CreateTables();
-            
-            return connection;
-        }
+        //    Configure<AbpDbContextOptions>(options =>
+        //    {
+        //        options.Configure(abpDbContextConfigurationContext =>
+        //        {
+        //            abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+        //        });
+        //    });
+        //}
+
+        //private static SqliteConnection CreateDatabaseAndGetConnection()
+        //{
+        //    var connection = new SqliteConnection("Data Source=:memory:");
+        //    connection.Open();
+
+        //    new DesignerDbContext(
+        //        new DbContextOptionsBuilder<DesignerDbContext>().UseSqlite(connection).Options
+        //    ).GetService<IRelationalDatabaseCreator>().CreateTables();
+
+        //    return connection;
+        //}
     }
 }

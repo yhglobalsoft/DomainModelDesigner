@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,12 @@ namespace DomainModelDesigner.Designer.Host
 {
     public class DemoAppDbContextFactory : IDesignTimeDbContextFactory<DemoAppDbContext>
     {
+        //private readonlovider)y IServiceProvider _serviceProvider;
+        //public DemoAppDbContextFactory(IServiceProvider servicePr
+        //{
+        //    _serviceProvider = serviceProvider;
+        //}
+
         public DemoAppDbContext CreateDbContext(string[] args)
         {
             var configuration = BuildConfiguration();

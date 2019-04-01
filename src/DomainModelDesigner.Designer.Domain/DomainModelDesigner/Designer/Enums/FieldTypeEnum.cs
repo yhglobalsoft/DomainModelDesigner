@@ -20,17 +20,5 @@ namespace DomainModelDesigner.Designer.ValueObjects
         {
         }
 
-        public static FieldTypeEnum GetById(int id)
-        {
-            IEnumerable<FieldTypeEnum> list = GetAll<FieldTypeEnum>();
-            var obj = list.GetEnumerator();
-            while (obj.MoveNext())
-            {
-                if (obj.Current.Id == id)
-                    return obj.Current;
-            }
-
-            return null;
-        }
     }
 }

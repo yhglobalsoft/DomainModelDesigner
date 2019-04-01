@@ -8,7 +8,8 @@
 
         public static string NoDataCheck = "DE:003";
 
-        public static string CanNotBeDelete_DataIsUsed = "DE:003";
+        public static string CanNotBeDelete_DataIsUsed = "DE:004";
 
+        public static string IsTooLongCheck = "DE:005";
     }
 }

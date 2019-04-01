@@ -1,6 +1,7 @@
 ﻿using DomainModelDesigner.Designer.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace DomainModelDesigner.Designer.Repositories
         IReadOnlyBasicRepository<AppAggRoot,Guid>,
         IReadOnlyBasicRepository<AppAggRoot>
     {
-        Task<AppAggRoot> GetByNameAsync(string name, bool includeDetails = true, CancellationToken cancellationToken=default(CancellationToken));
+        Task<List<AppAggRoot>> GetByNameAsync(string name, bool includeDetails = true, CancellationToken cancellationToken=default(CancellationToken));
 
         Task<List<AppAggRoot>> GetListAsync(
           string sorting = null,

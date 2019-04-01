@@ -23,8 +23,4 @@
     <ProjectReference Include="..\DomainModelDesigner.Designer.Domain.Shared\DomainModelDesigner.Designer.Domain.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DomainModelDesigner\Designer\ValueObjects\" />
-  </ItemGroup>
-
 </Project>

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using DomainModelDesigner.Designer.Localization;
 using Volo.Abp.Application;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
@@ -7,6 +6,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 using FluentValidation.AspNetCore;
 using DomainModelDesigner.Designer.Dtos.Validators;
+using Volo.Abp.Localization.ExceptionHandling;
 
 namespace DomainModelDesigner.Designer
 {
@@ -31,8 +31,13 @@ namespace DomainModelDesigner.Designer
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Get<DesignerResource>()
+                    .Get<DefaultResource>()
                     .AddVirtualJson("/DomainModelDesigner/Designer/Localization/ApplicationContracts");
+            });
+
+            Configure<ExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("App", typeof(DefaultResource));
             });
 
             //context.Services.AddScoped<IValidatorInterceptor, CreateAppInputDtoValidator>();

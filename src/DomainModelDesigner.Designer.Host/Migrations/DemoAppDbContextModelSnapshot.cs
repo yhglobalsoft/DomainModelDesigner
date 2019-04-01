@@ -26,42 +26,28 @@ namespace DomainModelDesigner.Designer.Host.Migrations
 
                     b.Property<string>("ConcurrencyStamp");
 
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<Guid?>("CreatorId");
+
                     b.Property<string>("Descriptions")
                         .HasMaxLength(255);
 
-                    b.Property<Guid>("DomainEntityId");
+                    b.Property<Guid>("DomainId");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
-
-                    b.Property<string>("FieldDescription")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("FieldLen")
-                        .IsRequired()
-                        .HasMaxLength(10);
-
-                    b.Property<string>("FieldName")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.Property<string>("FieldTypeId")
-                        .IsRequired()
-                        .HasMaxLength(36);
 
                     b.Property<bool>("IdIsKey");
 
                     b.Property<int>("IdTypeId");
 
-                    b.Property<bool>("IsConstructorParameter");
-
-                    b.Property<bool>("IsMultiple");
-
-                    b.Property<bool>("IsSimpleField");
-
                     b.Property<string>("KeyFields")
                         .HasMaxLength(100);
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -119,40 +105,28 @@ namespace DomainModelDesigner.Designer.Host.Migrations
 
                     b.Property<string>("ConcurrencyStamp");
 
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<Guid?>("CreatorId");
+
                     b.Property<string>("Descriptions")
                         .HasMaxLength(255);
 
+                    b.Property<Guid>("DomainId");
+
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
-
-                    b.Property<string>("FieldDescription")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("FieldLen")
-                        .IsRequired()
-                        .HasMaxLength(10);
-
-                    b.Property<string>("FieldName")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.Property<string>("FieldTypeId")
-                        .IsRequired()
-                        .HasMaxLength(36);
 
                     b.Property<bool>("IdIsKey");
 
                     b.Property<int>("IdTypeId");
 
-                    b.Property<bool>("IsConstructorParameter");
-
-                    b.Property<bool>("IsMultiple");
-
-                    b.Property<bool>("IsSimpleField");
-
                     b.Property<string>("KeyFields")
                         .HasMaxLength(100);
+
+                    b.Property<DateTime?>("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -163,7 +137,48 @@ namespace DomainModelDesigner.Designer.Host.Migrations
                     b.ToTable("Entities");
                 });
 
-            modelBuilder.Entity("DomainModelDesigner.Designer.Entities.IndexDesc", b =>
+            modelBuilder.Entity("DomainModelDesigner.Designer.Entities.FieldEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("AggRootObjectAggRootId");
+
+                    b.Property<Guid?>("EntityObjectAggRootId");
+
+                    b.Property<string>("FieldDescription")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("FieldLen")
+                        .HasMaxLength(10);
+
+                    b.Property<string>("FieldName")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.Property<string>("FieldTypeId")
+                        .IsRequired();
+
+                    b.Property<bool>("IsConstructorParameter");
+
+                    b.Property<bool>("IsMultiple");
+
+                    b.Property<bool>("IsSimpleField");
+
+                    b.Property<Guid?>("ValueObjectAggRootId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AggRootObjectAggRootId");
+
+                    b.HasIndex("EntityObjectAggRootId");
+
+                    b.HasIndex("ValueObjectAggRootId");
+
+                    b.ToTable("Fields");
+                });
+
+            modelBuilder.Entity("DomainModelDesigner.Designer.Entities.IndexEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -177,6 +192,8 @@ namespace DomainModelDesigner.Designer.Host.Migrations
                     b.Property<string>("IndexName")
                         .IsRequired()
                         .HasMaxLength(30);
+
+                    b.Property<Guid>("IndexSourceId");
 
                     b.Property<bool>("IsUnique");
 
@@ -196,33 +213,21 @@ namespace DomainModelDesigner.Designer.Host.Migrations
 
                     b.Property<string>("ConcurrencyStamp");
 
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<Guid?>("CreatorId");
+
                     b.Property<string>("Descriptions")
                         .HasMaxLength(255);
+
+                    b.Property<Guid>("DomainId");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
 
-                    b.Property<string>("FieldDescription")
-                        .IsRequired()
-                        .HasMaxLength(255);
+                    b.Property<DateTime?>("LastModificationTime");
 
-                    b.Property<string>("FieldLen")
-                        .IsRequired()
-                        .HasMaxLength(10);
-
-                    b.Property<string>("FieldName")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.Property<string>("FieldTypeId")
-                        .IsRequired()
-                        .HasMaxLength(36);
-
-                    b.Property<bool>("IsConstructorParameter");
-
-                    b.Property<bool>("IsMultiple");
-
-                    b.Property<bool>("IsSimpleField");
+                    b.Property<Guid?>("LastModifierId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -488,18 +493,39 @@ namespace DomainModelDesigner.Designer.Host.Migrations
                 {
                     b.HasOne("DomainModelDesigner.Designer.Entities.AppAggRoot")
                         .WithMany("DomainEntities")
-                        .HasForeignKey("AppAggRootId");
+                        .HasForeignKey("AppAggRootId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("DomainModelDesigner.Designer.Entities.IndexDesc", b =>
+            modelBuilder.Entity("DomainModelDesigner.Designer.Entities.FieldEntity", b =>
+                {
+                    b.HasOne("DomainModelDesigner.Designer.Entities.AggRootObjectAggRoot")
+                        .WithMany("Fields")
+                        .HasForeignKey("AggRootObjectAggRootId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DomainModelDesigner.Designer.Entities.EntityObjectAggRoot")
+                        .WithMany("Fields")
+                        .HasForeignKey("EntityObjectAggRootId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DomainModelDesigner.Designer.Entities.ValueObjectAggRoot")
+                        .WithMany("Fields")
+                        .HasForeignKey("ValueObjectAggRootId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DomainModelDesigner.Designer.Entities.IndexEntity", b =>
                 {
                     b.HasOne("DomainModelDesigner.Designer.Entities.AggRootObjectAggRoot")
                         .WithMany("Indexs")
-                        .HasForeignKey("AggRootObjectAggRootId");
+                        .HasForeignKey("AggRootObjectAggRootId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DomainModelDesigner.Designer.Entities.EntityObjectAggRoot")
                         .WithMany("Indexs")
-                        .HasForeignKey("EntityObjectAggRootId");
+                        .HasForeignKey("EntityObjectAggRootId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>

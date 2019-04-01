@@ -22,7 +22,7 @@ namespace DomainModelDesigner.Designer
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddProfile<DesignerApplicationAutoMapperProfile>(validate: true);
+                options.AddProfile<DesignerApplicationAutoMapperProfile>(validate: false);
             });
 
             Configure<SettingOptions>(options =>

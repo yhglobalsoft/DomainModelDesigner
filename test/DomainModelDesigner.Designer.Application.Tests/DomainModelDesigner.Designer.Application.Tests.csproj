@@ -15,4 +15,10 @@
     <ProjectReference Include="..\DomainModelDesigner.Designer.Domain.Tests\DomainModelDesigner.Designer.Domain.Tests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="DomainModelDesigner\Designer\Tests\TestDatas\CreateAppInputDto.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

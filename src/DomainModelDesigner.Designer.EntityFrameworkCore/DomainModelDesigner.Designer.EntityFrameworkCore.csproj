@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DomainModelDesigner.Designer.Domain\DomainModelDesigner.Designer.Domain.csproj" />
+    <ProjectReference Include="..\DomainModelDesigner.Designer.Inf\DomainModelDesigner.Designer.Inf.csproj" />
   </ItemGroup>
 
 </Project>

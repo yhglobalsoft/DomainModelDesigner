@@ -9,7 +9,7 @@ using Volo.Abp.Domain.Repositories;
 namespace DomainModelDesigner.Designer.Repositories
 {
     public interface IReadOnlyAggRootObjectRepository :
-        IReadOnlyBasicRepository<AggRootObjectAggRoot,Guid>,
+        IReadOnlyBasicRepository<AggRootObjectAggRoot, Guid>,
         IReadOnlyBasicRepository<AggRootObjectAggRoot>
     {
         Task<AggRootObjectAggRoot> GetByNameAsync(string name, CancellationToken cancellationToken);

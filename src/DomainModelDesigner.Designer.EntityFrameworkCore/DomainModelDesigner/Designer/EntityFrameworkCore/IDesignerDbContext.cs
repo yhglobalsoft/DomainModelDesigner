@@ -17,6 +17,6 @@ namespace DomainModelDesigner.Designer.EntityFrameworkCore
         DbSet<ValueObjectAggRoot> ValueObjectAggRoots { get; set; }
         DbSet<EntityObjectAggRoot> EntityObjectAggRoots { get; set; }
         DbSet<AggRootObjectAggRoot> AggRootObjectAggRoots { get; set; }
-        DbSet<IndexDesc> IndexDescs { get; set; }
+        DbSet<IndexEntity> IndexDescs { get; set; }
     }
 }

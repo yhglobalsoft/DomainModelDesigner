@@ -30,6 +30,20 @@ namespace DomainModelDesigner.Designer.ValueObjects
             return fields.Select(f => f.GetValue(null)).Cast<T>();
         }
 
+
+        public static T GetById<T>(int id) where T : Enumeration
+        {
+            IEnumerable<T> list = GetAll<T>();
+            var obj = list.GetEnumerator();
+            while (obj.MoveNext())
+            {
+                if (obj.Current.Id == id)
+                    return obj.Current;
+            }
+
+            return null;
+        }
+
         public override bool Equals(object obj)
         {
             var otherValue = obj as Enumeration;

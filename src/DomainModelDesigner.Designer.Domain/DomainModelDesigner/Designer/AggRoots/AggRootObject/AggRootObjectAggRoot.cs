@@ -1,18 +1,21 @@
-﻿using DomainModelDesigner.Designer.ValueObjects;
+﻿using DomainModelDesigner.Designer.Enums;
+using DomainModelDesigner.Designer.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace DomainModelDesigner.Designer.Entities
 {
-    public class AggRootObjectAggRoot : AggregateRootBase
+    public class AggRootObjectAggRoot : AuditedAggregateRoot<Guid>
     {
         public virtual Guid AppId { get; private set; }
+
         /// <summary>
         /// 聚合根所属的领域
         /// </summary>
-        public virtual Guid DomainEntityId { get; private set; }
+        public virtual Guid DomainId { get; private set; }
 
         /// <summary>
         /// 类的名称
@@ -27,14 +30,14 @@ namespace DomainModelDesigner.Designer.Entities
         /// <summary>
         /// Id列的类型
         /// </summary>
-        public virtual FieldTypeEnum IdTypeEnum
+        public virtual FieldTypeEnum IdType
         {
             get
             {
-                return FieldTypeEnum.GetById(_idTypeId);
+                return FieldTypeEnum.GetById<FieldTypeEnum>(_idType);
             }
         }
-        private int _idTypeId;
+        private int _idType;
 
         /// <summary>
         /// 是否将id作为主键
@@ -46,21 +49,24 @@ namespace DomainModelDesigner.Designer.Entities
         /// </summary>
         public virtual string KeyFields { get; private set; }
 
-        private List<IndexDesc> _indexs = new List<IndexDesc>();
+        private List<IndexEntity> _indexs = new List<IndexEntity>();
         /// <summary>
         /// 索引信息
         /// </summary>
-        public virtual IReadOnlyList<IndexDesc> Indexs => _indexs;
+        public virtual IReadOnlyList<IndexEntity> Indexs => _indexs;
 
+        private List<FieldEntity> _fields = new List<FieldEntity>();
+        public virtual IReadOnlyList<FieldEntity> Fields => _fields;
 
-        public AggRootObjectAggRoot(Guid appId, Guid domainEntityId,bool idIsKey, string keyFields, string name, string descriptions, string fieldName,
-            string fieldTypeId, bool isSimpleField, bool isConstructorParameter, bool isMultiple, string fieldLen, string fieldDescription) :
-            base(fieldName, fieldTypeId, isSimpleField, isConstructorParameter, isMultiple, fieldLen, fieldDescription)
+        protected AggRootObjectAggRoot() { }
+
+        public AggRootObjectAggRoot(Guid appId, Guid domainEntityId, bool idIsKey, FieldTypeEnum idType, 
+            string keyFields, string name, string descriptions)
         {
             //默认是guid类型
-            _idTypeId = FieldTypeEnum.UUID.Id;
+            _idType = idType.Id;
 
-            DomainEntityId = domainEntityId;
+            DomainId = domainEntityId;
             AppId = appId;
 
             SetName(name);
@@ -74,7 +80,7 @@ namespace DomainModelDesigner.Designer.Entities
 
         public virtual void SetIdType(FieldTypeEnum typeEnum)
         {
-            _idTypeId = typeEnum.Id;
+            _idType = typeEnum.Id;
         }
 
         public virtual void SetIdIsKey(bool idIsKey)
@@ -89,13 +95,13 @@ namespace DomainModelDesigner.Designer.Entities
 
         public virtual void AddIndex(string indexName, bool isUnique, string fields)
         {
-            _indexs.Add(new IndexDesc(indexName, isUnique, fields));
+            _indexs.Add(new IndexEntity(IndexSourceEnum.AggRoot,this.Id,indexName, isUnique, fields));
         }
 
         public virtual void SetName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new BusinessException(DesignerDomainErrorCodes.NullOrEmptyCheck)
+                throw new DomainException(DesignerDomainErrorCodes.NullOrEmptyCheck)
                     .WithData("paramName", nameof(name));
 
             Name = name;
@@ -104,6 +110,18 @@ namespace DomainModelDesigner.Designer.Entities
         public virtual void SetDescriptions(string descriptions)
         {
             Descriptions = descriptions;
+        }
+
+        public virtual void AddField(string fieldName, string fieldTypeId, bool isSimpleField,
+            bool isConstructorParameter, bool isMultiple, string fieldLen, string fieldDescription)
+        {
+            _fields.Add(new FieldEntity(fieldName, fieldTypeId, isSimpleField,
+               isConstructorParameter, isMultiple, fieldLen, fieldDescription));
+        }
+
+        public virtual void ClearFields()
+        {
+            _fields.Clear();
         }
     }
 }

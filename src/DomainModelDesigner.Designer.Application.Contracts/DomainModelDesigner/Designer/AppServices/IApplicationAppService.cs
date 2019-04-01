@@ -1,28 +1,31 @@
 ﻿using DomainModelDesigner.Designer.Dtos;
+using DomainModelDesigner.Designer.Dtos.ApplicationAppService;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace DomainModelDesigner.Designer.AppServices
 {
-    public interface IApplicationAppService:
-        IAsyncCrudAppService<SearchAppOutputDto,Guid,SearchAppInputDto,CreateAppInputDto>
+    public interface IApplicationAppService //:IAsyncCrudAppService<AppEntityDto,Guid,SearchAppInputDto,CreateAppInputDto>
     {
-        Task UpdateDomainAsync(Guid appId, UpdateDomainInputDto dto, CancellationToken cancellationToken = default(CancellationToken));
+        Task<AppEntityDto> CreateAppAsync(string appName);
 
-        //Task<Guid> CreateAsync(CreateAppInputDto dto, CancellationToken cancellationToken=default(CancellationToken));
+        Task<AppEntityDto> CreateDomainAsync(Guid appId, CreateDomainDto dto);
 
-        //Task UpdateAsync(UpdateAppInputDto dto, CancellationToken cancellationToken = default(CancellationToken));
+        Task<AppEntityDto> UpdateDomainAsync(Guid appId,Guid domainId, string domainName,string domainRemark);
 
-        //Task UpdateDomainAsync(UpdateDomainInputDto dto, CancellationToken cancellationToken = default(CancellationToken));
+        Task RemoveDomainAsync(Guid appId, Guid domainId);
 
-        //Task DeleteAsync(Guid id, CancellationToken cancellationToken = default(CancellationToken));
+        Task UpdateAppNameAsync(Guid appId, string name);
 
-        //Task DeleteDomainAsync(DeleteDomainInputDto dto, CancellationToken cancellationToken = default(CancellationToken));
+        Task DeleteAppAsync(Guid appId);
 
+        Task<AppEntityDto> GetAsync(Guid appId);
 
+        Task<PagedResultDto<AppEntityDto>> GetListAsync(SearchAppInputDto input);
     }
 }

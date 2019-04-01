@@ -1,0 +1,9 @@
+{
+  "name": "app1",
+  "domains": [
+    {
+      "domainName": "domain1",
+      "remark": "domain1_remark"
+    }
+  ]
+}

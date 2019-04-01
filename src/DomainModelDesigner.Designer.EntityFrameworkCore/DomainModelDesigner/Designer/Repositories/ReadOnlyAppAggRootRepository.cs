@@ -21,15 +21,31 @@ namespace DomainModelDesigner.Designer.Repositories
         {
         }
 
-        public async Task<AppAggRoot> GetByNameAsync(string name, bool includeDetails = true, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// 重写本方法的原因：基类中的方法在查不到数据时会抛异常
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="includeDetails"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public override async Task<AppAggRoot> GetAsync(Guid id, bool includeDetails = true, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (includeDetails)
-                return await DbContext.AppAggRoots.AsTracking().Include(p=>p.DomainEntities)
-                 .SingleOrDefaultAsync(p => string.Equals(p.AppName, name, StringComparison.OrdinalIgnoreCase));
+                return await DbContext.AppAggRoots.AsTracking().Include(p => p.DomainEntities)
+                 .SingleOrDefaultAsync(p => p.Id.Equals(id));
             else
                 return await DbContext.AppAggRoots.AsTracking()
-                 .SingleOrDefaultAsync(p => string.Equals(p.AppName, name, StringComparison.OrdinalIgnoreCase));
+                .SingleOrDefaultAsync(p => p.Id.Equals(id));
+        }
 
+        public async Task<List<AppAggRoot>> GetByNameAsync(string name, bool includeDetails = true, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (includeDetails)
+                return await DbContext.AppAggRoots.AsTracking().Include(p => p.DomainEntities)
+                           .Where(p => string.Equals(p.AppName, name, StringComparison.OrdinalIgnoreCase)).ToListAsync();
+            else
+                return await DbContext.AppAggRoots.AsTracking()
+                          .Where(p => string.Equals(p.AppName, name, StringComparison.OrdinalIgnoreCase)).ToListAsync();
         }
 
         public async Task<List<AppAggRoot>> GetListAsync(string sorting = null, int maxResultCount = int.MaxValue, int skipCount = 0, string filter = null, bool includeDetails = false, CancellationToken cancellationToken = default(CancellationToken))

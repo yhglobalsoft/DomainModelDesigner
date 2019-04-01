@@ -20,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation.AspNetCore;
 using FluentValidation.Attributes;
+using DomainModelDesigner.Designer.Inf;
 
 namespace DomainModelDesigner.Designer.Host
 {
@@ -116,7 +117,8 @@ namespace DomainModelDesigner.Designer.Host
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
-            //app.ApplicationServices.GetService<>();
+
+            IocManager.ServiceProvider = app.ApplicationServices;
 
             app.UseVirtualFiles();
 

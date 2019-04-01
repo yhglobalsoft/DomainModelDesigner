@@ -34,7 +34,7 @@ namespace DomainModelDesigner.Designer.Entities
         public virtual void SetAppName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new BusinessException(DesignerDomainErrorCodes.NullOrEmptyCheck)
+                throw new DomainException(DesignerDomainErrorCodes.NullOrEmptyCheck)
                     .WithData("paramName", nameof(name));
 
             AppName = name;
@@ -49,10 +49,15 @@ namespace DomainModelDesigner.Designer.Entities
         {
             var obj = _domainEntities.SingleOrDefault(p=>p.Id.Equals(domainId));
             if(obj==null)
-                throw new BusinessException(DesignerDomainErrorCodes.NoDataCheck)
+                throw new DomainException(DesignerDomainErrorCodes.NoDataCheck)
                     .WithData("paramValue", domainId);
 
             _domainEntities.Remove(obj);
+        }
+
+        public virtual void ClearDomainEntity()
+        {
+            _domainEntities.Clear();
         }
     }
 }

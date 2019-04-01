@@ -1,19 +1,22 @@
-﻿using System;
+﻿using DomainModelDesigner.Designer.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Volo.Abp;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace DomainModelDesigner.Designer.Entities
 {
     /// <summary>
     /// 值对象聚合根
     /// </summary>
-    public class ValueObjectAggRoot : AggregateRootBase
+    public class ValueObjectAggRoot :AuditedAggregateRoot<Guid>
     {
         /// <summary>
-        /// 聚合根所属的领域
+        /// 值对象所属的领域
         /// </summary>
-        public virtual Guid DomainEntityId { get; private set; }
+        public virtual Guid DomainId { get; private set; }
 
         /// <summary>
         /// 类的名称
@@ -25,11 +28,14 @@ namespace DomainModelDesigner.Designer.Entities
         /// </summary>
         public virtual string Descriptions { get; private set; }
 
-        public ValueObjectAggRoot(Guid domainEntityId,string name, string descriptions,string fieldName, string fieldTypeId, 
-            bool isSimpleField, bool isConstructorParameter, bool isMultiple, string fieldLen, string fieldDescription) 
-            :base(fieldName, fieldTypeId, isSimpleField,isConstructorParameter, isMultiple, fieldLen, fieldDescription)
+        private List<FieldEntity> _fields=new List<FieldEntity>();
+        public virtual IReadOnlyList<FieldEntity> Fields => _fields;
+
+        protected ValueObjectAggRoot() { }
+
+        public ValueObjectAggRoot(Guid domainId,string name, string descriptions) 
         {
-            DomainEntityId = domainEntityId;
+            DomainId = domainId;
 
             SetName(name);
 
@@ -39,7 +45,7 @@ namespace DomainModelDesigner.Designer.Entities
         public virtual void SetName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new BusinessException(DesignerDomainErrorCodes.NullOrEmptyCheck)
+                throw new DomainException(DesignerDomainErrorCodes.NullOrEmptyCheck)
                     .WithData("paramName", nameof(name));
 
             Name = name;
@@ -48,6 +54,18 @@ namespace DomainModelDesigner.Designer.Entities
         public virtual void SetDescriptions(string descriptions)
         {
             Descriptions = descriptions;
+        }
+
+        public virtual void AddField(string fieldName, string fieldTypeId, bool isSimpleField,
+            bool isConstructorParameter, bool isMultiple, string fieldLen, string fieldDescription)
+        {
+            _fields.Add(new FieldEntity(fieldName, fieldTypeId, isSimpleField, isConstructorParameter,
+              isMultiple, fieldLen, fieldDescription));
+        }
+
+        public virtual void ClearFields()
+        {
+            _fields.Clear();
         }
     }
 }

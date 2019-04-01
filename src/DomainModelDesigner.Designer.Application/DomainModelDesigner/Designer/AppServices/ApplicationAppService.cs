@@ -11,88 +11,102 @@ using Volo.Abp.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using DomainModelDesigner.Designer.Dtos.Validators;
 using Microsoft.Extensions.Localization;
-using DomainModelDesigner.Designer.Localization;
 using FluentValidation;
 using System.Linq;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Localization;
+using DomainModelDesigner.Designer.EntityDtos;
+using DomainModelDesigner.Designer.Tools;
+using DomainModelDesigner.Designer.Dtos.ApplicationAppService;
 
 namespace DomainModelDesigner.Designer.AppServices 
 {
     public class ApplicationAppService :ApplicationService, IApplicationAppService
     {
         private readonly IAppManager _appManager;
+        private readonly ICheck _check;
         private readonly IReadOnlyAppAggRootRepository _appRepository;
-        //private readonly IStringLocalizer<DesignerResource> _localizer;
 
-        public ApplicationAppService(IAppManager appManager, IReadOnlyAppAggRootRepository appAggRootRepository)
+        public ApplicationAppService(IAppManager appManager,
+            IReadOnlyAppAggRootRepository appAggRootRepository,
+            ICheck check)
         {
             _appManager = appManager;
             _appRepository = appAggRootRepository;
+            _check = check;
         }
 
-        public async Task<SearchAppOutputDto> CreateAsync(CreateAppInputDto input)
+        public async Task<AppEntityDto> CreateAppAsync(string appName)
         {
-            new CreateAppInputDtoValidator(L).ValidateAndThrow(input);
+            _check.IsNullOrWhiteSpace(appName, nameof(appName))
+                       .IsTooLong(DomainFieldLengthConsts.AppConsts.AppNameLen, appName, nameof(appName));
 
-            var obj = ObjectMapper.Map<CreateAppInputDto, AppAggRoot>(input);
+            var result = await _appManager.CreateAppAsync(appName);
 
-            var result = await _appManager.CreateAsync(obj);
-
-            return ObjectMapper.Map<AppAggRoot, SearchAppOutputDto>(result);
+            return ObjectMapper.Map<AppAggRoot, AppEntityDto>(result);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<AppEntityDto> CreateDomainAsync(Guid appId, CreateDomainDto dto)
         {
-            await _appManager.DeleteAsync(id);
+            _check.GuidIsNull(appId)
+                       .IsNull<CreateDomainDto>(dto)
+                       .IsNullForEach<CreateDomainDtoDetail>(dto.Domains, (domain) =>
+                       {
+
+                           _check.IsNullOrWhiteSpace(domain.Name, nameof(domain.Name))
+                                      .IsTooLong(DomainFieldLengthConsts.AppConsts.DomainNameLen, domain.Remark, nameof(domain.Remark));
+
+                       });
+
+            var eDto = ObjectMapper.Map<CreateDomainDto, AddDomainEDto>(dto);
+
+            var result = await _appManager.AddDomainAsync(appId, eDto);
+
+            return ObjectMapper.Map<AppAggRoot, AppEntityDto>(result);
         }
 
-        public async Task<SearchAppOutputDto> GetAsync(Guid id)
+        public async Task DeleteAppAsync(Guid appId)
         {
-            var obj =await _appRepository.GetAsync(id);
-            if (obj != null)
-                return ObjectMapper.Map<AppAggRoot, SearchAppOutputDto>(obj);
-
-            return null;
+            await _appManager.DeleteAppAsync(appId);
         }
 
-        public async Task<PagedResultDto<SearchAppOutputDto>> GetListAsync(SearchAppInputDto input)
+        public async Task<AppEntityDto> GetAsync(Guid appId)
+        {
+            var result =await _appRepository.GetAsync(appId);
+
+            return ObjectMapper.Map<AppAggRoot, AppEntityDto>(result);
+        }
+
+        public async Task<PagedResultDto<AppEntityDto>> GetListAsync(SearchAppInputDto input)
         {
             //获取总数
             var totalCount = await _appRepository.GetCountAsync();
 
             var result = await _appRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter, false);
 
-            return new PagedResultDto<SearchAppOutputDto>()
+            return new PagedResultDto<AppEntityDto>()
             {
                 TotalCount = totalCount,
-                Items = ObjectMapper.Map<List<AppAggRoot>, List<SearchAppOutputDto>>(result)
+                Items = ObjectMapper.Map<List<AppAggRoot>, List<AppEntityDto>>(result)
             };
         }
 
-        public async Task<SearchAppOutputDto> UpdateAsync(Guid id, CreateAppInputDto input)
+        public async Task RemoveDomainAsync(Guid appId, Guid domainId)
         {
-            var obj = ObjectMapper.Map<CreateAppInputDto, AppAggRoot>(input);
-            obj.Id = id;
-
-            var result=await _appManager.UpdateAsync(obj);
-
-            return ObjectMapper.Map<AppAggRoot, SearchAppOutputDto>(result);
+            await _appManager.RemoveDomainAsync(appId,domainId);
         }
 
-        public async Task UpdateDomainAsync(Guid apId,UpdateDomainInputDto dto, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task UpdateAppNameAsync(Guid appId, string name)
         {
-            var obj =await _appRepository.GetAsync(apId);
-            if (obj == null)
-                throw new Exception(L["App:003"]);
-
-            var domain = obj.DomainEntities.SingleOrDefault(p=>p.Id.Equals(dto.Domain.Id));
-            if(domain==null)
-                throw new Exception(L["App:003"]);
-
-            domain.SetDomainName(dto.Domain.DomainName);
-            domain.SetRemark(dto.Domain.Remark);
-
-            await _appManager.UpdateAsync(obj, cancellationToken);
+            await _appManager.UpdateAppNameAsync(appId,name);
         }
+
+        public async Task<AppEntityDto> UpdateDomainAsync(Guid appId, Guid domainId, string domainName, string domainRemark)
+        {
+            var result =await _appManager.UpdateDomainAsync(appId, domainId, domainName, domainRemark);
+
+            return ObjectMapper.Map<AppAggRoot, AppEntityDto>(result);
+        }
+
     }
 }

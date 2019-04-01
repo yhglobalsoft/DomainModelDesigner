@@ -1,8 +1,10 @@
 ﻿using System;
 using DomainModelDesigner.Designer.Entities;
 using DomainModelDesigner.Designer.EntityFrameworkCore.ModelConfigs;
+using DomainModelDesigner.Designer.Inf;
 using DomainModelDesigner.Designer.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 
@@ -20,12 +22,15 @@ namespace DomainModelDesigner.Designer.EntityFrameworkCore
 
             optionsAction?.Invoke(options);
 
-            AppAggRootConfig.Config(builder, options.TablePrefix, options.Schema);
-            AggRootObjectAggRootConfig.Config(builder, options.TablePrefix, options.Schema);
-            DomainEntityConfig.Config(builder, options.TablePrefix, options.Schema);
-            EntityObjectAggRootConfig.Config(builder, options.TablePrefix, options.Schema);
-            IndexDescConfig.Config(builder, options.TablePrefix, options.Schema);
-            ValueObjectAggRootConfig.Config(builder, options.TablePrefix, options.Schema);
+            #region EF模型配置
+            FieldEntityConfig.Config(builder, options);
+            AppAggRootConfig.Config(builder, options);
+            AggRootObjectAggRootConfig.Config(builder, options);
+            DomainEntityConfig.Config(builder, options);
+            EntityObjectAggRootConfig.Config(builder, options);
+            IndexDescConfig.Config(builder, options);
+            ValueObjectAggRootConfig.Config(builder, options);
+            #endregion
         }
     }
 }
